@@ -20,10 +20,11 @@
   </main>
   <script>
     const key = document.querySelector('#pix-key').textContent;
-    document.querySelector('#copy-pix').addEventListener('click', async event => {
-      try { await navigator.clipboard.writeText(key); }
-      catch { const field = document.createElement('textarea'); field.value = key; field.style.position = 'fixed'; field.style.opacity = '0'; document.body.appendChild(field); field.select(); document.execCommand('copy'); field.remove(); }
-      event.currentTarget.textContent = 'Pix copiado'; setTimeout(() => event.currentTarget.textContent = 'copiar chave Pix', 2400);
+    document.querySelector('#copy-pix').addEventListener('click', event => {
+      const field = document.createElement('textarea'); field.value = key; field.style.position = 'fixed'; field.style.opacity = '0'; document.body.appendChild(field); field.select();
+      const copied = document.execCommand('copy'); field.remove();
+      if (!copied && navigator.clipboard) navigator.clipboard.writeText(key).catch(() => undefined);
+      event.currentTarget.textContent = copied ? 'Pix copiado' : 'copie a chave acima'; setTimeout(() => event.currentTarget.textContent = 'copiar chave Pix', 2400);
     });
   </script>
 </body>
