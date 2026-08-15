@@ -195,6 +195,7 @@
     .btn.primary { border-color: var(--pink); background: linear-gradient(100deg, var(--pink), #ff6c9a); box-shadow: 0 0 24px rgba(255,62,103,.28); }
     .btn.cyan { border-color: var(--cyan); background: linear-gradient(100deg, #087fba, var(--cyan)); color: #03141b; }
     .btn.violet { border-color: var(--violet); background: linear-gradient(100deg, #5631ae, var(--violet)); }
+    .btn.green { border-color: var(--green); background: linear-gradient(100deg, #3b7d2f, var(--green)); color: #07120a; }
     .btn.small { min-height: 38px; padding: 9px 13px; font-size: .74rem; }
     .scroll-cue {
       position: absolute;
@@ -401,7 +402,9 @@
             <a class="btn primary" href="#arcade">Abrir o arcade</a>
             <a class="btn cyan" href="https://kasulajunio.github.io/f7x-digital/">Explorar F7X Digital</a>
             <a class="btn violet" href="https://kasulajunio.github.io/fabio7x-io-games/">IO Games ↗</a>
+            <a class="btn green" href="./ai.html">Fabio7X AI ↗</a>
             <a class="btn" href="https://kasulajunio.github.io/fabio7x-mini-game-kit/">Abrir Mini Game Kit ↗</a>
+            <button class="btn" id="share-hub" type="button">↗ Compartilhar</button>
           </div>
         </div>
         <div class="scroll-cue">SCROLL TO PLAY ↓</div>
@@ -510,6 +513,13 @@
 
   <script>
     (() => {
+      const shareHub = document.getElementById('share-hub');
+      if (shareHub) shareHub.addEventListener('click', async () => {
+        try {
+          if (navigator.share) await navigator.share({ title: 'Fabio7X Digital Universe', text: 'Jogue, explore a IA e conheça os projetos Fabio7X.', url: location.href });
+          else { await navigator.clipboard.writeText(location.href); shareHub.textContent = '✓ Link copiado'; setTimeout(() => shareHub.textContent = '↗ Compartilhar', 1800); }
+        } catch (error) { /* cancelamento do compartilhamento não é erro para o visitante */ }
+      });
       const $ = (selector) => document.querySelector(selector);
       const $$ = (selector) => [...document.querySelectorAll(selector)];
       const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
