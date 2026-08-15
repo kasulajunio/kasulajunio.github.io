@@ -21,10 +21,10 @@
   <script>
     const key = document.querySelector('#pix-key').textContent;
     document.querySelector('#copy-pix').addEventListener('click', event => {
-      const field = document.createElement('textarea'); field.value = key; field.style.position = 'fixed'; field.style.opacity = '0'; document.body.appendChild(field); field.select();
-      const copied = document.execCommand('copy'); field.remove();
+      let copied = false;
+      try { const field = document.createElement('textarea'); field.value = key; field.style.position = 'fixed'; field.style.opacity = '0'; document.body.appendChild(field); field.select(); copied = typeof document.execCommand === 'function' && document.execCommand('copy'); field.remove(); } catch { copied = false; }
       if (!copied && navigator.clipboard) navigator.clipboard.writeText(key).catch(() => undefined);
-      event.currentTarget.textContent = copied ? 'Pix copiado' : 'copie a chave acima'; setTimeout(() => event.currentTarget.textContent = 'copiar chave Pix', 2400);
+      event.currentTarget.textContent = copied ? 'Pix copiado' : 'chave pronta para copiar'; setTimeout(() => event.currentTarget.textContent = 'copiar chave Pix', 2400);
     });
   </script>
 </body>
