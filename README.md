@@ -16,7 +16,7 @@ Este repositório publica o hub oficial da Fabio7X no GitHub Pages. Ele reúne e
 | Neon Reflex | Desafio de reflexo com alvo luminoso e pontuação local. | [Jogar](https://kasulajunio.github.io/#arcade) |
 | Pixel Dodge | Sobrevivência rápida com teclado ou toque. | [Jogar](https://kasulajunio.github.io/#arcade) |
 | Memory Pulse | Jogo de pares com movimentos e tempo. | [Jogar](https://kasulajunio.github.io/#arcade) |
-| Fabio7X AI | Espaço conversacional com o assistente NEXO-7. | [Conversar](https://fabiodigi-pr7pfynb.manus.space/#nexo) |
+| Fabio7X AI | Espaço conversacional com o assistente NEXO-7. | [Conversar](https://fabioai7x-43rgqwfj.manus.space/) |
 | Fabio7X AI Lite | Página estática de entrada para a IA, publicada no GitHub Pages. | [Abrir](https://kasulajunio.github.io/ai.html) |
 
 ## Estrutura e publicação
