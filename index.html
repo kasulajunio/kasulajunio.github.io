@@ -5,30 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-3682757500898797">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3682757500898797" crossorigin="anonymous"></script>
-    <title>Fabio7X Digital Hub</title>
+    <title>Fabio7X Digital Hub | MIGABIO Studio</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;overflow-x:hidden}
-        .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:40px 20px;background:linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 50%,#16213e 100%);position:relative}
-        .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(transparent,#0a0a0f)}
+        .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;text-align:center;padding:40px 20px;background:linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 50%,#16213e 100%);position:relative}
+        .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,#0a0a0f)}
         .logo{font-size:3.5rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#ff3e67,#ff6b6b,#4ECDC4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .subtitle{font-size:1.1rem;color:#888;margin-bottom:32px;letter-spacing:2px}
-        .badge-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
-        .badge{padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:600;letter-spacing:1px}
+        .subtitle{font-size:1rem;color:#888;margin-bottom:24px;letter-spacing:2px}
+        .badge-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+        .badge{padding:6px 14px;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:1px}
         .b1{background:rgba(255,62,103,.15);color:#ff3e67;border:1px solid rgba(255,62,103,.3)}
         .b2{background:rgba(0,217,255,.15);color:#00d9ff;border:1px solid rgba(0,217,255,.3)}
         .b3{background:rgba(78,205,196,.15);color:#4ECDC4;border:1px solid rgba(78,205,196,.3)}
-        .section{max-width:900px;margin:0 auto;padding:40px 20px}
-        .section h2{font-size:1.8rem;margin-bottom:24px;text-align:center}
+        .b4{background:rgba(255,217,61,.15);color:#FFD93D;border:1px solid rgba(255,217,61,.3)}
+        .section{max-width:960px;margin:0 auto;padding:32px 20px}
+        .section h2{font-size:1.6rem;margin-bottom:20px;text-align:center}
         .section h2 span{color:#ff3e67}
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
-        .card{background:#111118;border:1px solid #1a1a2e;border-radius:16px;padding:24px;transition:all .3s;cursor:pointer;text-decoration:none;color:#fff;display:block}
-        .card:hover{transform:translateY(-4px);border-color:#ff3e67;box-shadow:0 8px 30px rgba(255,62,103,.15)}
-        .card .icon{font-size:2rem;margin-bottom:12px}
-        .card h3{font-size:1.1rem;margin-bottom:6px}
-        .card p{font-size:.85rem;color:#666;line-height:1.5}
-        .card .tag{display:inline-block;padding:3px 8px;border-radius:8px;font-size:.7rem;margin-top:8px;background:rgba(78,205,196,.15);color:#4ECDC4}
-        footer{text-align:center;padding:40px 20px;color:#333;font-size:.8rem;border-top:1px solid #111}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+        .card{background:#111118;border:1px solid #1a1a2e;border-radius:14px;padding:20px;transition:all .3s;cursor:pointer;text-decoration:none;color:#fff;display:block}
+        .card:hover{transform:translateY(-3px);border-color:#ff3e67;box-shadow:0 6px 24px rgba(255,62,103,.12)}
+        .card .icon{font-size:1.8rem;margin-bottom:10px}
+        .card h3{font-size:1rem;margin-bottom:4px}
+        .card p{font-size:.8rem;color:#555;line-height:1.4}
+        .card .tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.65rem;margin-top:6px;font-weight:600}
+        .tag-new{background:rgba(255,62,103,.15);color:#ff3e67}
+        .tag-game{background:rgba(78,205,196,.15);color:#4ECDC4}
+        .tag-tool{background:rgba(255,217,61,.15);color:#FFD93D}
+        .tag-org{background:rgba(0,217,255,.15);color:#00d9ff}
+        .stats{display:flex;gap:24px;justify-content:center;padding:24px;flex-wrap:wrap}
+        .stat{text-align:center}
+        .stat .num{font-size:2rem;font-weight:800;color:#ff3e67}
+        .stat .lbl{font-size:.75rem;color:#555;letter-spacing:1px}
+        footer{text-align:center;padding:32px 20px;color:#333;font-size:.75rem;border-top:1px solid #111}
         footer a{color:#ff3e67;text-decoration:none}
         @media(max-width:600px){.logo{font-size:2.5rem}.grid{grid-template-columns:1fr}}
     </style>
@@ -41,56 +50,39 @@
             <span class="badge b1">Games</span>
             <span class="badge b2">Web</span>
             <span class="badge b3">AI</span>
+            <span class="badge b4">Tools</span>
         </div>
+    </div>
+    <div class="stats">
+        <div class="stat"><div class="num">5</div><div class="lbl">GAMES</div></div>
+        <div class="stat"><div class="num">1</div><div class="lbl">TOOLS</div></div>
+        <div class="stat"><div class="num">7+</div><div class="lbl">REPOS</div></div>
+        <div class="stat"><div class="num">3</div><div class="lbl">SITES</div></div>
     </div>
     <div class="section">
         <h2>Arcade <span>Games</span></h2>
         <div class="grid">
-            <a class="card" href="games/neon-snake.html">
-                <div class="icon">&#127744;</div>
-                <h3>NeonSnake</h3>
-                <p>Jogo da cobra com visual cyberpunk neon. Controle por toque ou teclado.</p>
-                <span class="tag">NOVO</span>
-            </a>
-            <a class="card" href="games/cyber-pong.html">
-                <div class="icon">&#127955;</div>
-                <h3>CyberPong</h3>
-                <p>Pong contra IA com efeitos neon. Primeiro a 7 pontos vence!</p>
-                <span class="tag">NOVO</span>
-            </a>
-            <a class="card" href="https://kasulajunio.github.io/fabio7x-io-games/">
-                <div class="icon">&#127918;</div>
-                <h3>IO Games Arena</h3>
-                <p>Plataforma completa com 20+ jogos de navegador estilo .io</p>
-                <span class="tag">20+ JOGOS</span>
-            </a>
+            <a class="card" href="games/neon-snake.html"><div class="icon">&#127744;</div><h3>NeonSnake</h3><p>Cobra neon cyberpunk com efeitos de luz</p><span class="tag tag-new">NOVO</span></a>
+            <a class="card" href="games/cyber-pong.html"><div class="icon">&#127955;</div><h3>CyberPong</h3><p>Pong contra IA com efeitos neon</p><span class="tag tag-new">NOVO</span></a>
+            <a class="card" href="games/space-invaders.html"><div class="icon">&#128640;</div><h3>Space Invaders</h3><p>Invasores espaciais com waves infinitas</p><span class="tag tag-new">NOVO</span></a>
+            <a class="card" href="games/memory-cards.html"><div class="icon">&#127183;</div><h3>Memory Cards</h3><p>Jogo da memoria com emojis e timer</p><span class="tag tag-new">NOVO</span></a>
+            <a class="card" href="https://kasulajunio.github.io/fabio7x-io-games/"><div class="icon">&#127918;</div><h3>IO Games Arena</h3><p>20+ jogos de navegador estilo .io</p><span class="tag tag-game">20+ JOGOS</span></a>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Creative <span>Tools</span></h2>
+        <div class="grid">
+            <a class="card" href="tools/pixel-editor.html"><div class="icon">&#127912;</div><h3>Pixel Art Editor</h3><p>Crie pixel art com pincel, balde, borracha e exporte PNG</p><span class="tag tag-tool">TOOL</span></a>
         </div>
     </div>
     <div class="section">
         <h2>Nossos <span>Projetos</span></h2>
         <div class="grid">
-            <a class="card" href="https://kasulajunio.github.io/f7x-digital/">
-                <div class="icon">&#128187;</div>
-                <h3>F7X Digital</h3>
-                <p>Estudio digital com landing pages e sites profissionais.</p>
-                <span class="tag">STUDIO</span>
-            </a>
-            <a class="card" href="https://github.com/kasulajunio/fabio7x-mini-game-kit">
-                <div class="icon">&#129513;</div>
-                <h3>Mini Game Kit</h3>
-                <p>Kit open source de mini jogos neon. Codigo aberto MIT License.</p>
-                <span class="tag">OPEN SOURCE</span>
-            </a>
-            <a class="card" href="https://github.com/migabio-studio">
-                <div class="icon">&#127969;</div>
-                <h3>MIGABIO Studio</h3>
-                <p>Nossa organizacao no GitHub. Games, mods, sites e muito mais.</p>
-                <span class="tag">ORG</span>
-            </a>
+            <a class="card" href="https://kasulajunio.github.io/f7x-digital/"><div class="icon">&#128187;</div><h3>F7X Digital</h3><p>Estudio digital com sites profissionais</p><span class="tag tag-org">STUDIO</span></a>
+            <a class="card" href="https://github.com/kasulajunio/fabio7x-mini-game-kit"><div class="icon">&#129513;</div><h3>Mini Game Kit</h3><p>Kit open source de mini jogos neon</p><span class="tag tag-game">MIT</span></a>
+            <a class="card" href="https://github.com/migabio-studio"><div class="icon">&#127969;</div><h3>MIGABIO Studio</h3><p>Organizacao no GitHub com mods e projetos</p><span class="tag tag-org">ORG</span></a>
         </div>
     </div>
-    <footer>
-        &copy; 2026 <a href="https://github.com/kasulajunio">Fabio7X</a> &bull; MIGABIO Studio &bull; Porto Seguro, BA
-    </footer>
+    <footer>&copy; 2026 <a href="https://github.com/kasulajunio">Fabio7X</a> &bull; MIGABIO Studio &bull; Porto Seguro, BA &#127463;&#127479;</footer>
 </body>
 </html>
