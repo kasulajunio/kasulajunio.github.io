@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breakout Neon | MIGABIO Arcade</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:'Segoe UI',sans-serif;color:#fff;overflow:hidden;user-select:none}
+#hud{display:flex;gap:24px;margin-bottom:8px;font-size:14px;letter-spacing:1px}
+#hud span{color:#9b59b6}#hud .hi{color:#ff3e67}
+canvas{border:2px solid #1a1a2e;border-radius:8px;box-shadow:0 0 40px rgba(155,89,182,.12);touch-action:none}
+#msg{position:absolute;display:flex;flex-direction:column;align-items:center;gap:12px;background:rgba(10,10,15,.94);padding:32px 48px;border-radius:16px;border:1px solid #9b59b6;box-shadow:0 0 60px rgba(155,89,182,.2)}
+#msg h2{font-size:28px;color:#9b59b6;text-shadow:0 0 20px rgba(155,89,182,.5)}
+#msg p{font-size:14px;color:#aaa;text-align:center}
+#msg button{padding:12px 32px;border:none;border-radius:8px;background:linear-gradient(135deg,#9b59b6,#8e44ad);color:#fff;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:.2s}
+#msg button:hover{transform:scale(1.05)}
+.brand{position:fixed;bottom:10px;font-size:11px;color:#222;letter-spacing:2px}
+</style>
+</head>
+<body>
+<div id="hud"><div>Score: <span id="sc">0</span></div><div>Lives: <span class="hi" id="lv">3</span></div><div>Level: <span id="ll">1</span></div></div>
+<canvas id="c"></canvas>
+<div id="msg"><h2 id="mt">Breakout Neon</h2><p id="mp">Mouse ou toque para mover a barra</p><button onclick="init()">JOGAR</button></div>
+<div class="brand">MIGABIO STUDIO</div>
+<script>
+const C=document.getElementById('c'),X=C.getContext('2d');
+let W,H;function resize(){W=Math.min(innerWidth-20,500);H=Math.min(innerHeight-100,600);C.width=W;C.height=H}
+window.addEventListener('resize',resize);resize();
+const msgBox=document.getElementById('msg');
+let paddle,ball,bricks,score,lives,level,running;
+const colors=['#ff3e67','#ff6b6b','#FFD93D','#4ECDC4','#00d9ff','#9b59b6','#2ecc71','#e67e22'];
+function init(){paddle={x:W/2,y:H-20,w:80,h:10};ball={x:W/2,y:H-35,r:6,vx:3,vy:-3};score=0;lives=3;level=1;
+document.getElementById('sc').textContent=0;document.getElementById('lv').textContent=3;document.getElementById('ll').textContent=1;
+makeBricks();running=true;msgBox.style.display='none';requestAnimationFrame(loop)}
+function makeBricks(){bricks=[];const rows=4+Math.min(level,4),cols=Math.floor((W-20)/50);
+for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)bricks.push({x:10+c*50+2,y:40+r*22+2,w:46,h:18,color:colors[r%colors.length],alive:true})}
+function loop(){if(!running)return;update();draw();requestAnimationFrame(loop)}
+function update(){ball.x+=ball.vx;ball.y+=ball.vy;
+if(ball.x-ball.r<0||ball.x+ball.r>W)ball.vx*=-1;
+if(ball.y-ball.r<0)ball.vy*=-1;
+if(ball.y+ball.r>H){lives--;document.getElementById('lv').textContent=lives;if(lives<=0){running=false;document.getElementById('mt').textContent='Game Over';document.getElementById('mp').textContent='Score: '+score;msgBox.style.display='flex';return}ball.x=W/2;ball.y=H-35;ball.vx=3*(Math.random()>.5?1:-1);ball.vy=-3}
+if(ball.y+ball.r>paddle.y&&ball.x>paddle.x-paddle.w/2&&ball.x<paddle.x+paddle.w/2){ball.vy=-Math.abs(ball.vy);ball.vx+=(ball.x-paddle.x)*0.08}
+bricks.forEach(b=>{if(!b.alive)return;if(ball.x+ball.r>b.x&&ball.x-ball.r<b.x+b.w&&ball.y+ball.r>b.y&&ball.y-ball.r<b.y+b.h){b.alive=false;ball.vy*=-1;score+=10*level;document.getElementById('sc').textContent=score}});
+if(bricks.every(b=>!b.alive)){level++;document.getElementById('ll').textContent=level;ball.vx*=1.1;ball.vy*=1.1;makeBricks()}}
+function draw(){X.fillStyle='#0a0a0f';X.fillRect(0,0,W,H);
+X.shadowColor='#9b59b6';X.shadowBlur=10;X.fillStyle='#9b59b6';
+X.fillRect(paddle.x-paddle.w/2,paddle.y,paddle.w,paddle.h);X.shadowBlur=0;
+X.save();X.shadowColor='#fff';X.shadowBlur=12;X.fillStyle='#fff';X.beginPath();X.arc(ball.x,ball.y,ball.r,0,Math.PI*2);X.fill();X.restore();
+bricks.forEach(b=>{if(!b.alive)return;X.shadowColor=b.color;X.shadowBlur=6;X.fillStyle=b.color;X.fillRect(b.x,b.y,b.w,b.h);X.shadowBlur=0})}
+C.addEventListener('mousemove',e=>{const r=C.getBoundingClientRect();paddle.x=e.clientX-r.left;paddle.x=Math.max(paddle.w/2,Math.min(W-paddle.w/2,paddle.x))});
+C.addEventListener('touchmove',e=>{e.preventDefault();const r=C.getBoundingClientRect();paddle.x=e.touches[0].clientX-r.left;paddle.x=Math.max(paddle.w/2,Math.min(W-paddle.w/2,paddle.x))},{passive:false});
+draw();
+</script>
+</body>
+</html>
