@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Editor | MIGABIO Tools</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;display:flex;flex-direction:column;align-items:center;min-height:100vh;font-family:'Segoe UI',sans-serif;color:#fff;padding:16px}
+h1{font-size:1.4rem;margin-bottom:8px;background:linear-gradient(135deg,#ff3e67,#FFD93D);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.toolbar button{padding:6px 12px;border:1px solid #1a1a2e;border-radius:8px;background:#111118;color:#aaa;font-size:.8rem;cursor:pointer;transition:.2s}
+.toolbar button:hover,.toolbar button.active{border-color:#ff3e67;color:#fff;background:#1a1020}
+.colors{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:6px 0}
+.colors .swatch{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:.2s}
+.colors .swatch.active{border-color:#fff;transform:scale(1.15)}
+canvas{border:2px solid #1a1a2e;border-radius:4px;cursor:crosshair;touch-action:none;image-rendering:pixelated}
+.size-bar{display:flex;gap:8px;align-items:center;margin:8px 0;font-size:.8rem;color:#666}
+.size-bar input{width:100px}
+.actions{display:flex;gap:8px;margin:10px 0}
+.actions button{padding:8px 20px;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-save{background:linear-gradient(135deg,#4ECDC4,#45B7D1);color:#0a0a0f}
+.btn-clear{background:#222;color:#888;border:1px solid #333}
+.brand{margin-top:auto;padding:16px;font-size:11px;color:#222;letter-spacing:2px}
+</style>
+</head>
+<body>
+<h1>Pixel Art Editor</h1>
+<div class="colors" id="pal"></div>
+<div class="toolbar">
+<button class="active" onclick="setTool('draw',this)">Pincel</button>
+<button onclick="setTool('erase',this)">Borracha</button>
+<button onclick="setTool('fill',this)">Balde</button>
+<button onclick="setTool('pick',this)">Conta-gotas</button>
+</div>
+<div class="size-bar">Grid: <input type="range" id="gs" min="8" max="48" value="16" oninput="resizeGrid(+this.value)"><span id="gsv">16x16</span></div>
+<canvas id="c"></canvas>
+<div class="actions"><button class="btn-save" onclick="saveImg()">Salvar PNG</button><button class="btn-clear" onclick="clearGrid()">Limpar</button></div>
+<div class="brand">MIGABIO STUDIO</div>
+<script>
+const C=document.getElementById('c'),X=C.getContext('2d');
+const palette=['#000000','#ffffff','#ff3e67','#ff6b6b','#FFD93D','#4ECDC4','#45B7D1','#00d9ff','#9b59b6','#2ecc71','#e67e22','#1abc9c','#e74c3c','#3498db','#f39c12','#8e44ad','#333333','#666666','#999999','#cccccc'];
+let gridSize=16,cellSize,color='#ff3e67',tool='draw',grid,painting=false;
+function initPalette(){const p=document.getElementById('pal');p.innerHTML='';palette.forEach((c,i)=>{const s=document.createElement('div');s.className='swatch'+(c===color?' active':'');s.style.background=c;s.onclick=()=>{color=c;document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active')};p.appendChild(s)})}
+function resizeGrid(n){gridSize=n;document.getElementById('gsv').textContent=n+'x'+n;initGrid()}
+function initGrid(){const maxPx=Math.min(innerWidth-32,400);cellSize=Math.floor(maxPx/gridSize);C.width=C.height=cellSize*gridSize;grid=Array(gridSize).fill(null).map(()=>Array(gridSize).fill(null));drawGrid()}
+function drawGrid(){X.fillStyle='#111118';X.fillRect(0,0,C.width,C.height);for(let y=0;y<gridSize;y++)for(let x=0;x<gridSize;x++){if(grid[y][x]){X.fillStyle=grid[y][x];X.fillRect(x*cellSize,y*cellSize,cellSize,cellSize)}X.strokeStyle='#1a1a2e';X.strokeRect(x*cellSize,y*cellSize,cellSize,cellSize)}}
+function getCell(e){const r=C.getBoundingClientRect();const cx=e.clientX||e.touches[0].clientX;const cy=e.clientY||e.touches[0].clientY;return{x:Math.floor((cx-r.left)/cellSize),y:Math.floor((cy-r.top)/cellSize)}}
+function paint(e){const{x,y}=getCell(e);if(x<0||x>=gridSize||y<0||y>=gridSize)return;if(tool==='draw')grid[y][x]=color;else if(tool==='erase')grid[y][x]=null;else if(tool==='fill')floodFill(x,y,grid[y][x],color);else if(tool==='pick'&&grid[y][x]){color=grid[y][x];document.querySelectorAll('.swatch').forEach(s=>{s.classList.toggle('active',s.style.backgroundColor===color)})}drawGrid()}
+function floodFill(x,y,target,fill){if(x<0||x>=gridSize||y<0||y>=gridSize)return;if(grid[y][x]!==target||grid[y][x]===fill)return;grid[y][x]=fill;floodFill(x+1,y,target,fill);floodFill(x-1,y,target,fill);floodFill(x,y+1,target,fill);floodFill(x,y-1,target,fill)}
+function setTool(t,btn){tool=t;document.querySelectorAll('.toolbar button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function clearGrid(){grid=Array(gridSize).fill(null).map(()=>Array(gridSize).fill(null));drawGrid()}
+function saveImg(){const tmp=document.createElement('canvas');tmp.width=tmp.height=gridSize;const tx=tmp.getContext('2d');for(let y=0;y<gridSize;y++)for(let x=0;x<gridSize;x++){tx.fillStyle=grid[y][x]||'transparent';tx.fillRect(x,y,1,1)}const s=document.createElement('canvas');s.width=s.height=gridSize*16;const sx=s.getContext('2d');sx.imageSmoothingEnabled=false;sx.drawImage(tmp,0,0,s.width,s.height);const a=document.createElement('a');a.download='pixel-art.png';a.href=s.toDataURL();a.click()}
+C.addEventListener('mousedown',e=>{painting=true;paint(e)});C.addEventListener('mousemove',e=>{if(painting)paint(e)});
+C.addEventListener('mouseup',()=>painting=false);C.addEventListener('mouseleave',()=>painting=false);
+C.addEventListener('touchstart',e=>{e.preventDefault();painting=true;paint(e)},{passive:false});
+C.addEventListener('touchmove',e=>{e.preventDefault();if(painting)paint(e)},{passive:false});
+C.addEventListener('touchend',()=>painting=false);
+initPalette();initGrid();
+</script>
+</body>
+</html>
