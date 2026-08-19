@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flappy Neon | MIGABIO Arcade</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:'Segoe UI',sans-serif;color:#fff;overflow:hidden;user-select:none}
+#hud{display:flex;gap:24px;margin-bottom:8px;font-size:14px;letter-spacing:1px}
+#hud span{color:#FFD93D}#hud .hi{color:#ff3e67}
+canvas{border:2px solid #1a1a2e;border-radius:8px;box-shadow:0 0 40px rgba(255,217,61,.1);touch-action:none}
+#msg{position:absolute;display:flex;flex-direction:column;align-items:center;gap:12px;background:rgba(10,10,15,.94);padding:32px 48px;border-radius:16px;border:1px solid #FFD93D;box-shadow:0 0 60px rgba(255,217,61,.15)}
+#msg h2{font-size:28px;color:#FFD93D;text-shadow:0 0 20px rgba(255,217,61,.4)}
+#msg p{font-size:14px;color:#aaa;text-align:center}
+#msg button{padding:12px 32px;border:none;border-radius:8px;background:linear-gradient(135deg,#FFD93D,#f39c12);color:#0a0a0f;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:.2s}
+#msg button:hover{transform:scale(1.05)}
+.brand{position:fixed;bottom:10px;font-size:11px;color:#222;letter-spacing:2px}
+</style>
+</head>
+<body>
+<div id="hud"><div>Score: <span id="sc">0</span></div><div>Best: <span class="hi" id="bs">0</span></div></div>
+<canvas id="c"></canvas>
+<div id="msg"><h2 id="mt">Flappy Neon</h2><p id="mp">Toque ou espaco para voar!</p><button onclick="start()">JOGAR</button></div>
+<div class="brand">MIGABIO STUDIO</div>
+<script>
+const C=document.getElementById('c'),X=C.getContext('2d');
+let W,H;function resize(){W=Math.min(innerWidth-20,400);H=Math.min(innerHeight-80,600);C.width=W;C.height=H}
+window.addEventListener('resize',resize);resize();
+let bird,pipes,score,best=+(localStorage.getItem('fn_best')||0),gravity,flapPow,pipeW,gap,pipeSpd,spawnTimer,running;
+document.getElementById('bs').textContent=best;
+const msgBox=document.getElementById('msg');
+function start(){bird={x:W*0.25,y:H/2,vy:0,r:12};pipes=[];score=0;gravity=0.35;flapPow=-6.5;pipeW=40;gap=140;pipeSpd=2.5;spawnTimer=0;running=true;
+document.getElementById('sc').textContent=0;msgBox.style.display='none';requestAnimationFrame(loop)}
+function flap(){if(!running)return;bird.vy=flapPow}
+document.addEventListener('keydown',e=>{if(e.key===' '||e.key==='ArrowUp')flap()});
+C.addEventListener('click',flap);C.addEventListener('touchstart',e=>{e.preventDefault();flap()},{passive:false});
+function spawnPipe(){const minY=60,maxY=H-gap-60;const topH=minY+Math.random()*(maxY-minY);pipes.push({x:W,top:topH,scored:false})}
+function loop(){if(!running)return;update();draw();requestAnimationFrame(loop)}
+function update(){bird.vy+=gravity;bird.y+=bird.vy;spawnTimer++;if(spawnTimer>90){spawnPipe();spawnTimer=0}
+pipes.forEach(p=>{p.x-=pipeSpd;if(!p.scored&&p.x+pipeW<bird.x){p.scored=true;score++;document.getElementById('sc').textContent=score;
+if(score>best){best=score;document.getElementById('bs').textContent=best;localStorage.setItem('fn_best',best)}
+if(score%5===0){pipeSpd+=0.2;gap=Math.max(100,gap-3)}}});
+pipes=pipes.filter(p=>p.x>-pipeW);
+if(bird.y-bird.r<0||bird.y+bird.r>H)die();
+pipes.forEach(p=>{if(bird.x+bird.r>p.x&&bird.x-bird.r<p.x+pipeW){if(bird.y-bird.r<p.top||bird.y+bird.r>p.top+gap)die()}})}
+function die(){running=false;document.getElementById('mt').textContent='Game Over';
+document.getElementById('mp').textContent='Score: '+score+(score>=best?' RECORDE!':'');msgBox.style.display='flex'}
+function draw(){X.fillStyle='#0a0a0f';X.fillRect(0,0,W,H);
+for(let i=0;i<15;i++){X.fillStyle='rgba(255,255,255,'+(0.08+Math.random()*0.15)+')';X.fillRect(Math.random()*W,Math.random()*H,1,1)}
+pipes.forEach(p=>{X.fillStyle='#2ecc71';X.shadowColor='#2ecc71';X.shadowBlur=8;
+X.fillRect(p.x,0,pipeW,p.top);X.fillRect(p.x,p.top+gap,pipeW,H-p.top-gap);
+X.fillStyle='#27ae60';X.fillRect(p.x-3,p.top-12,pipeW+6,12);X.fillRect(p.x-3,p.top+gap,pipeW+6,12);X.shadowBlur=0});
+X.save();X.shadowColor='#FFD93D';X.shadowBlur=15;X.fillStyle='#FFD93D';
+X.beginPath();X.arc(bird.x,bird.y,bird.r,0,Math.PI*2);X.fill();
+X.fillStyle='#f39c12';X.beginPath();X.moveTo(bird.x+bird.r,bird.y);X.lineTo(bird.x+bird.r+8,bird.y-3);X.lineTo(bird.x+bird.r+8,bird.y+3);X.closePath();X.fill();
+X.fillStyle='#000';X.beginPath();X.arc(bird.x+4,bird.y-3,2.5,0,Math.PI*2);X.fill();
+X.restore();X.shadowBlur=0;
+X.fillStyle='#1a1a2e';X.fillRect(0,H-3,W,3)}
+draw();
+</script>
+</body>
+</html>
