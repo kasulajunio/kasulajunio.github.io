@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberPong | MIGABIO Arcade</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:'Segoe UI',sans-serif;color:#fff;overflow:hidden;user-select:none}
+#hud{display:flex;gap:40px;margin-bottom:12px;font-size:20px;font-weight:700;letter-spacing:2px}
+#hud .p1{color:#00d9ff}#hud .p2{color:#ff3e67}
+canvas{border:2px solid #1a1a2e;border-radius:8px;box-shadow:0 0 40px rgba(0,217,255,.15);touch-action:none}
+#msg{position:absolute;display:flex;flex-direction:column;align-items:center;gap:12px;background:rgba(10,10,15,.92);padding:32px 48px;border-radius:16px;border:1px solid #00d9ff;box-shadow:0 0 60px rgba(0,217,255,.2)}
+#msg h2{font-size:28px;color:#00d9ff;text-shadow:0 0 20px rgba(0,217,255,.5)}
+#msg p{font-size:14px;color:#aaa;text-align:center}
+#msg button{padding:12px 32px;border:none;border-radius:8px;background:linear-gradient(135deg,#00d9ff,#4ECDC4);color:#0a0a0f;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:.2s}
+#msg button:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(0,217,255,.4)}
+.brand{position:fixed;bottom:12px;font-size:11px;color:#333;letter-spacing:2px}
+</style>
+</head>
+<body>
+<div id="hud"><span class="p1" id="s1">0</span><span>:</span><span class="p2" id="s2">0</span></div>
+<canvas id="c"></canvas>
+<div id="msg"><h2>CyberPong</h2><p>Mova com mouse/toque<br>Primeiro a 7 vence!</p><button onclick="start()">JOGAR</button></div>
+<div class="brand">MIGABIO STUDIO</div>
+<script>
+const C=document.getElementById('c'),X=C.getContext('2d');
+let W,H,p1,p2,ball,s1=0,s2=0,running=false,aiSpeed;
+const PH=80,PW=10,BS=8;
+function resize(){W=Math.min(innerWidth-24,500);H=Math.min(innerHeight-100,400);C.width=W;C.height=H}
+window.addEventListener('resize',resize);resize();
+function reset(){p1={x:12,y:H/2-PH/2};p2={x:W-12-PW,y:H/2-PH/2};ball={x:W/2,y:H/2,vx:(Math.random()>.5?1:-1)*4,vy:(Math.random()-.5)*6};aiSpeed=3+Math.random()*2}
+function start(){s1=0;s2=0;document.getElementById('s1').textContent=0;document.getElementById('s2').textContent=0;reset();running=true;document.getElementById('msg').style.display='none';requestAnimationFrame(loop)}
+function loop(){if(!running)return;update();draw();requestAnimationFrame(loop)}
+function update(){const center=p2.y+PH/2;const diff=ball.y-center;if(Math.abs(diff)>5)p2.y+=Math.sign(diff)*aiSpeed;p2.y=Math.max(0,Math.min(H-PH,p2.y));ball.x+=ball.vx;ball.y+=ball.vy;if(ball.y<=0||ball.y>=H){ball.vy*=-1;ball.y=ball.y<=0?0:H}if(ball.x<=p1.x+PW&&ball.y>=p1.y&&ball.y<=p1.y+PH){ball.vx=Math.abs(ball.vx)*1.05;ball.vy+=(ball.y-(p1.y+PH/2))*.15}if(ball.x>=p2.x-BS&&ball.y>=p2.y&&ball.y<=p2.y+PH){ball.vx=-Math.abs(ball.vx)*1.05;ball.vy+=(ball.y-(p2.y+PH/2))*.15}if(ball.x<0){s2++;document.getElementById('s2').textContent=s2;if(s2>=7){endGame('IA');return}reset()}if(ball.x>W){s1++;document.getElementById('s1').textContent=s1;if(s1>=7){endGame('Voce');return}reset()}}
+function endGame(w){running=false;const m=document.getElementById('msg');m.querySelector('h2').textContent=w+' Venceu!';m.querySelector('p').innerHTML=s1+' x '+s2;m.style.display='flex'}
+function draw(){X.fillStyle='#0a0a0f';X.fillRect(0,0,W,H);X.setLineDash([8,8]);X.strokeStyle='#1a1a2e';X.lineWidth=2;X.beginPath();X.moveTo(W/2,0);X.lineTo(W/2,H);X.stroke();X.setLineDash([]);X.shadowColor='#00d9ff';X.shadowBlur=12;X.fillStyle='#00d9ff';X.fillRect(p1.x,p1.y,PW,PH);X.shadowColor='#ff3e67';X.fillStyle='#ff3e67';X.fillRect(p2.x,p2.y,PW,PH);X.shadowColor='#fff';X.shadowBlur=15;X.fillStyle='#fff';X.beginPath();X.arc(ball.x,ball.y,BS/2,0,Math.PI*2);X.fill();X.shadowBlur=0}
+C.addEventListener('mousemove',e=>{if(!running)return;const r=C.getBoundingClientRect();p1.y=e.clientY-r.top-PH/2;p1.y=Math.max(0,Math.min(H-PH,p1.y))});
+C.addEventListener('touchmove',e=>{e.preventDefault();if(!running)return;const r=C.getBoundingClientRect();p1.y=e.touches[0].clientY-r.top-PH/2;p1.y=Math.max(0,Math.min(H-PH,p1.y))},{passive:false});
+draw();
+</script>
+</body>
+</html>
